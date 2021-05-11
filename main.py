@@ -1,4 +1,6 @@
 import logging
+import os
+import sys
 import traceback
 
 import discord
@@ -22,6 +24,15 @@ class main(commands.Bot):
                 self.load_extension(cog)
             except Exception:
                 traceback.print_exc()
+
+    async def on_ready(self):
+        # 起動したらターミナルにログイン通知が表示される
+        logging.info('Bot logged')
+        if len(sys.argv) == 2:
+            with open("ID_DISCORD_CL_ZAKO") as f:
+                channel = self.get_channel(int(f.read().splitlines()[0]))
+                await channel.send("restarted. command completed.")
+            os.remove("ID_DISCORD_CL_ZAKO")
 
 
 if __name__ == '__main__':

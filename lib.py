@@ -40,7 +40,7 @@ async def process_output(p, m, msg, ctx):
 
 
 async def usedname(name,channel):
-    await channel.send("少々お待ちください(最大約3分)")
+    await channel.send("少々お待ちください(のこり最大約3分)")
     # Selenium 経由でブラウザを操作する
     driver.get('https://ja.namemc.com/search?q=' + name)
     try:
@@ -52,6 +52,7 @@ async def usedname(name,channel):
             return False
     except selenium.common.exceptions.NoSuchElementException:
         await asyncio.sleep(60*3)
+        await usedname(name, channel)
 
 
 def quit_driver():
