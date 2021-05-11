@@ -1,0 +1,34 @@
+import logging
+import traceback
+
+import discord
+from discord.ext import commands
+
+INITIAL_EXTENSIONS = [
+    "cogs.restart",
+    "cogs.oauth"
+]
+logging.basicConfig(level=logging.INFO,
+                    format="\033[38;5;4m%(asctime)s \033[38;5;10m[%(module)s] [%(name)s]=>L%(lineno)d "
+                           "\033[38;5;14m[%(levelname)s] \033[0m%(message)s")
+
+
+class main(commands.Bot):
+    def __init__(self, command_prefix, **options):
+        super().__init__(command_prefix, **options)
+
+        for cog in INITIAL_EXTENSIONS:
+            try:
+                self.load_extension(cog)
+            except Exception:
+                traceback.print_exc()
+
+
+if __name__ == '__main__':
+    with open('token', 'r') as f:
+        TOKEN = f.readline().rstrip()
+
+    intents = discord.Intents.default()
+    intents.members = True
+    bot = main(command_prefix=',', help_command=None, intents=intents)  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
+    bot.run(TOKEN)  # Botのトークン
