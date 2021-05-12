@@ -15,17 +15,6 @@ user_agent = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 '
     'Safari/537.36 '
 ]
-# Chrome のオプションを設定する
-options = webdriver.ChromeOptions()
-options.add_argument('--headless')
-options.add_argument("--user-agent=" + random.choice(user_agent))
-
-# Selenium Server に接続する
-driver = webdriver.Remote(
-    command_executor='http://localhost:4444/wd/hub',
-    desired_capabilities=options.to_capabilities(),
-    options=options,
-)
 
 
 async def process_output(p, m, msg, ctx):
@@ -40,6 +29,18 @@ async def process_output(p, m, msg, ctx):
 
 
 async def usedname(name,channel):
+    # Chrome のオプションを設定する
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument("--user-agent=" + random.choice(user_agent))
+
+    # Selenium Server に接続する
+    driver = webdriver.Remote(
+        command_executor='http://localhost:4444/wd/hub',
+        desired_capabilities=options.to_capabilities(),
+        options=options,
+    )
+
     await channel.send("少々お待ちください(のこり最大約3分)")
     # Selenium 経由でブラウザを操作する
     driver.get('https://ja.namemc.com/search?q=' + name)
@@ -53,11 +54,5 @@ async def usedname(name,channel):
     except selenium.common.exceptions.NoSuchElementException:
         await asyncio.sleep(60*3)
         await usedname(name, channel)
-
-
-def quit_driver():
-    # ブラウザを終了する
-    driver.quit()
-
-
-atexit.register(quit_driver)
+    finally:
+        driver.quit()
