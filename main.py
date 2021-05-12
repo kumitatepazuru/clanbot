@@ -29,10 +29,10 @@ class main(commands.Bot):
         # 起動したらターミナルにログイン通知が表示される
         logging.info('Bot logged')
         if len(sys.argv) == 2:
-            with open("ID_DISCORD_CL_ZAKO") as f:
+            with open("ID_DISCORD_CL_CLAN") as f:
                 channel = self.get_channel(int(f.read().splitlines()[0]))
                 await channel.send("restarted. command completed.")
-            os.remove("ID_DISCORD_CL_ZAKO")
+            os.remove("ID_DISCORD_CL_CLAN")
 
 
 if __name__ == '__main__':
