@@ -1,5 +1,4 @@
 import asyncio
-import atexit
 import random
 
 import discord
@@ -36,7 +35,7 @@ async def usedname(name,channel):
 
     # Selenium Server に接続する
     driver = webdriver.Remote(
-        command_executor='http://localhost:4444/wd/hub',
+        command_executor='http://chome-celenium:4444/wd/hub',
         desired_capabilities=options.to_capabilities(),
         options=options,
     )

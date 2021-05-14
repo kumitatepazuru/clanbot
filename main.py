@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 import traceback
 
 import discord
@@ -28,7 +27,7 @@ class main(commands.Bot):
     async def on_ready(self):
         # 起動したらターミナルにログイン通知が表示される
         logging.info('Bot logged')
-        if len(sys.argv) == 2:
+        if os.path.isfile("ID_DISCORD_CL_CLAN"):
             with open("ID_DISCORD_CL_CLAN") as f:
                 channel = self.get_channel(int(f.read().splitlines()[0]))
                 await channel.send("restarted. command completed.")
@@ -36,10 +35,10 @@ class main(commands.Bot):
 
 
 if __name__ == '__main__':
-    with open('token', 'r') as f:
-        TOKEN = f.readline().rstrip()
+    # with open('token', 'r') as f:
+    #     TOKEN = f.readline().rstrip()
 
     intents = discord.Intents.default()
     intents.members = True
     bot = main(command_prefix=',', help_command=None, intents=intents)  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
-    bot.run(TOKEN)  # Botのトークン
+    bot.run(os.environ.get("TOKEN"))  # Botのトークン
