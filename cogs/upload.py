@@ -52,11 +52,11 @@ class upload(commands.Cog):
                 reaction, _ = await self.bot.wait_for("reaction_add", check=check)
                 await msg.clear_reactions()
 
-                fn = randomname(8)
-                while os.path.isdir(fn):
-                    fn = randomname(8)
-                os.makedirs("./httpd/file/" + fn + "/")
-                fn = "./httpd/file/" + fn + "/" + args[0] + ".zip"
+                rn = randomname(8)
+                while os.path.isdir(rn):
+                    rn = randomname(8)
+                os.makedirs("./httpd/file/" + rn + "/")
+                fn = "./httpd/file/" + rn + "/" + args[0] + ".zip"
                 with zipfile.ZipFile(fn, "w", zipfile.ZIP_LZMA) as z:
                     self.bot.cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={channel.id}")
                     rows = self.bot.cursor.fetchall()
@@ -74,7 +74,7 @@ class upload(commands.Cog):
                         requests.get("http://dockerserver_ngrok_1:4040/api/tunnels").content.decode("utf-8"))
                     embed = discord.Embed()
                     embed.add_field(name="ファイルが共有されました!",
-                                    value="ダウンロードURL: " + root["tunnels"][0]["public_url"] + "/file/" + fn + "/" + args[0] + ".zip")
+                                    value="ダウンロードURL: " + root["tunnels"][0]["public_url"] + "/file/" + rn + "/" + args[0] + ".zip")
                     embed.add_field(name="コメント", value=args[1])
                     if i[0] is None:
                         await ch.send(embed=embed)
