@@ -21,6 +21,8 @@ class main(commands.Bot):
         for cog in INITIAL_EXTENSIONS:
             try:
                 self.load_extension(cog)
+            except SystemExit:
+                pass
             except Exception:
                 traceback.print_exc()
 

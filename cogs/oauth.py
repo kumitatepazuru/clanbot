@@ -14,6 +14,8 @@ class oauth(commands.Cog):
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
         if message.channel.id == 838608610392539156:
+            self.logger.info("got mcid msg")
+            self.logger.info("create new channel "+message.author.name + "-認証")
             guild: discord.Guild = self.bot.get_guild(message.guild.id)
             overwrites = {
                 guild.default_role: discord.PermissionOverwrite(read_messages=False),
@@ -23,6 +25,8 @@ class oauth(commands.Cog):
             channel: discord.TextChannel = await guild.create_text_channel(name=message.author.name + "-認証",
                                                                            overwrites=overwrites)
             if await usedname(message.content, channel):
+                self.logger.info("Already used mcid. Continue authentication.")
+                self.logger.info(f"URL: https://ja.namemc.com/profile/{message.content}.1")
                 msg: discord.Message = await channel.send(
                     message.author.mention + f"https://ja.namemc.com/profile/{message.content}.1\n"
                                              f"このユーザーでよろしいでしょうか。問題がない場合は\N{HEAVY LARGE CIRCLE}を"
@@ -37,10 +41,13 @@ class oauth(commands.Cog):
 
                 reaction, _ = await self.bot.wait_for("reaction_add", check=check)
                 await msg.clear_reactions()
+                self.logger.info("completed authentication.")
                 await channel.delete(reason="ユーザーに問題はなく、それをユーザー自身が同意したため、認証用チャンネルを削除した")
                 await message.author.add_roles(message.guild.get_role(838607211411406850))
                 await self.bot.get_channel(838605680209559604).send(message.author.mention + "ようこそクラメンへ")
             else:
+                self.logger.warning("not used this mcid.")
+                self.logger.warning(f"content: {message.content}")
                 await self.bot.get_channel(838606067889864754).send(
                     "@everyone " + message.author.name + "が送信した" + message.
                     content + "は存在しませんでした。適切な処理をしてください。チャンネル: " + channel.mention)
