@@ -37,11 +37,12 @@ class main(commands.Bot):
                 i += 1
                 time.sleep(1)
                 print(f"bootstrap:upload.py:WARN: Can't connect to MySQL server {i}/10")
-            else:
-                cursor = self.con.cursor()
-                cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
-                cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT, url TEXT)")
-                cursor.execute(
+            finally:
+                self.con.autocommit(True)
+                self.cursor = self.con.cursor()
+                self.cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
+                self.cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT, url TEXT)")
+                self.cursor.execute(
                     "CREATE TABLE IF NOT EXISTS clanbot.guild_data "
                     "( `guild_id` BIGINT NOT NULL , "
                     "`mention_id` BIGINT NULL DEFAULT NULL , "
@@ -50,7 +51,6 @@ class main(commands.Bot):
                     "`mod_id` BIGINT NOT NULL , "
                     "`notification_id` BIGINT NOT NULL )"
                 )
-                cursor.close()
 
         for cog in INITIAL_EXTENSIONS:
             try:
