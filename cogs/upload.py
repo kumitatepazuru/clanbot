@@ -1,13 +1,25 @@
 import json
 import logging
+import os
+import random
+import string
 import time
+import zipfile
+from io import BytesIO
 
 import MySQLdb
 import discord
+import requests
 from discord.ext import commands
 
 ok = False
 i = 0
+
+
+def randomname(n):
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=n))
+
+
 while not ok and i < 10:
     try:
         con = MySQLdb.connect(
@@ -32,7 +44,9 @@ class upload(commands.Cog):
         self.logger = logging.getLogger(__name__)
 
     @commands.command()
-    async def dlf(self, ctx: commands.Context):
+    async def dlf(self, ctx: commands.Context, *args):
+        if len(args) != 2:
+            await ctx.send("自分が使っているファイルなどを共有するコマンド\n\n**使い方**\n,dlf [共有ファイル名] [コメント]")
         self.logger.info("started dl man")
         self.logger.info("create new channel " + ctx.author.name + "-アップロード")
         guild: discord.Guild = self.bot.get_guild(ctx.guild.id)
@@ -45,7 +59,8 @@ class upload(commands.Cog):
                                                                        overwrites=overwrites)
         cursor.execute(f"INSERT INTO clanbot.upload_channel VALUES ({channel.id},'[]')")
 
-        msg = await channel.send(ctx.author.mention+" こちらに、modファイルを**まとめずに**送信してください。(自動的にまとめられます）\n送り終わったら🆗を押してください")
+        msg = await channel.send(
+            ctx.author.mention + " こちらに、modファイルを**まとめずに**送信してください。(自動的にまとめられます）\n送り終わったら🆗を押してください")
         await msg.add_reaction("🆗")
 
         def check(ren: discord.Reaction, user: discord.User) -> bool:
@@ -55,9 +70,20 @@ class upload(commands.Cog):
 
         reaction, _ = await self.bot.wait_for("reaction_add", check=check)
         await msg.clear_reactions()
-        cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={channel.id}")
-        rows = cursor.fetchall()
-        await channel.send("\n".join(json.loads(rows[0][0])))
+
+        fn = randomname(8)
+        while os.path.isdir(fn):
+            fn = randomname(8)
+        fn = "./httpd/file/" + fn + "/" + args[0] + ".zip"
+        with zipfile.ZipFile(fn, "w", zipfile.ZIP_LZMA) as z:
+            cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={channel.id}")
+            rows = cursor.fetchall()
+            await channel.send("送信されたファイルからzipファイルを生成中...")
+            for i in json.loads(rows[0][0]):
+                inf = zipfile.ZipInfo(os.path.basename(i), (1970, 1, 1, 0, 0, 0))
+                with BytesIO(requests.get(i).content) as f:
+                    z.writestr(inf, f)
+        self.logger.info("file generated URL:"+fn)
 
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
