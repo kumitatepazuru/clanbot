@@ -35,7 +35,7 @@ async def usedname(name,channel):
 
     # Selenium Server に接続する
     driver = webdriver.Remote(
-        command_executor='http://chome-celenium:4444/wd/hub',
+        command_executor='http://dockerserver_chrome-selenium_1:4444/wd/hub',
         desired_capabilities=options.to_capabilities(),
         options=options,
     )

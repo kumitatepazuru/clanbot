@@ -26,7 +26,7 @@ class upload(commands.Cog):
         con = MySQLdb.connect(
             user='root',
             passwd='docker_sql',
-            host='mysql',
+            host='dockerserver_mysql_1',
             charset="utf8")
         cursor = con.cursor()
         cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
