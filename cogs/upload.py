@@ -84,7 +84,7 @@ class upload(commands.Cog):
                         guild = self.bot.get_guild(i[1])
                         await ch.send(guild.get_role(i[0]), embed=embed)
 
-                self.bot.cursor.execute(f"DELETE FROM clanbot.upload_channel channel_id={channel.id}")
+                self.bot.cursor.execute(f"DELETE FROM clanbot.upload_channel WHERE channel_id={channel.id}")
 
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
