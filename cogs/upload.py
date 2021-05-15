@@ -24,7 +24,7 @@ class upload(commands.Cog):
 
     @commands.command()
     async def dlf(self, ctx: commands.Context, *args):
-        if issetup(ctx.guild, self.bot.cursor, ctx.channel):
+        if await issetup(ctx.guild, self.bot.cursor, ctx.channel):
             if len(args) != 2:
                 await ctx.send("自分が使っているファイルなどを共有するコマンド\n\n**使い方**\n,dlf [共有ファイル名] [コメント]")
             else:
