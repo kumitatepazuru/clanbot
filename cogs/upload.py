@@ -82,10 +82,11 @@ class upload(commands.Cog):
                 rows = cursor.fetchall()
                 await channel.send("送信されたファイルからzipファイルを生成中...")
                 for i in json.loads(rows[0][0]):
-                    inf = zipfile.ZipInfo(os.path.basename(i), (1970, 1, 1, 0, 0, 0))
+                    inf = zipfile.ZipInfo(os.path.basename(i), (1980, 1, 1, 0, 0, 0))
                     with BytesIO(requests.get(i).content) as f:
                         z.writestr(inf, f)
             self.logger.info("file generated URL:"+fn)
+            await channel.send("作成が完了しました")
 
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
