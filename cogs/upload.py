@@ -51,7 +51,7 @@ class upload(commands.Cog):
         def check(ren: discord.Reaction, user: discord.User) -> bool:
             # リアクション先のメッセージや追加された絵文字が適切かどうか判断する。
             return str(
-                ren.emoji) in "🆗" and ren.message == msg and user == message.author
+                ren.emoji) in "🆗" and ren.message == msg and user == ctx.author
 
         reaction, _ = await self.bot.wait_for("reaction_add", check=check)
         await msg.clear_reactions()
@@ -64,11 +64,12 @@ class upload(commands.Cog):
         cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={message.channel.id}")
         rows = cursor.fetchall()
         if len(rows) != 0:
-            self.logger.info(message.attachments[0].url)
-            f = json.loads(rows[0][0])
-            f.append(message.attachments[0].url)
-            cursor.execute(
-                "UPDATE clanbot.upload_channel SET url='" + json.dumps(f) + f"' WHERE id={message.channel.id}")
+            for i in message.attachments:
+                self.logger.info(i.url)
+                f = json.loads(rows[0][0])
+                f.append(i.url)
+                cursor.execute(
+                    "UPDATE clanbot.upload_channel SET url='" + json.dumps(f) + f"' WHERE id={message.channel.id}")
 
     def __del__(self):
         cursor.close()
