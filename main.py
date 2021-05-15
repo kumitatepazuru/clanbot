@@ -71,6 +71,7 @@ class main(commands.Bot):
 
 
 def close(bot):
+    bot.cursor.close()
     bot.con.close()
 
 
