@@ -30,7 +30,7 @@ class upload(commands.Cog):
             charset="utf8")
         cursor = con.cursor()
         cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
-        cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id int)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT)")
         cursor.execute(f"INSERT INTO clanbot.upload_channel VALUES ({channel.id})")
         cursor.execute("SELECT * FROM clanbot.upload_channel")
 
