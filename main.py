@@ -1,8 +1,8 @@
+import atexit
 import logging
 import os
 import time
 import traceback
-import atexit
 
 import MySQLdb
 import discord
@@ -38,11 +38,19 @@ class main(commands.Bot):
                 time.sleep(1)
                 print(f"bootstrap:upload.py:WARN: Can't connect to MySQL server {i}/10")
             else:
-                # TODO: cursorを呼び出しごとに出す
-                self.cursor = self.con.cursor()
-                self.cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
-                self.cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT, url TEXT)")
-                self.cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.guild_data ( `guild_id` BIGINT NOT NULL , `mention_id` BIGINT NULL DEFAULT NULL , `upload_id` BIGINT NULL DEFAULT NULL , `mcid_id` BIGINT NOT NULL , `mod_id` BIGINT NOT NULL , `notification_id` BIGINT NOT NULL )")
+                cursor = self.con.cursor()
+                cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
+                cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT, url TEXT)")
+                cursor.execute(
+                    "CREATE TABLE IF NOT EXISTS clanbot.guild_data "
+                    "( `guild_id` BIGINT NOT NULL , "
+                    "`mention_id` BIGINT NULL DEFAULT NULL , "
+                    "`upload_id` BIGINT NULL DEFAULT NULL , "
+                    "`mcid_id` BIGINT NOT NULL , "
+                    "`mod_id` BIGINT NOT NULL , "
+                    "`notification_id` BIGINT NOT NULL )"
+                )
+                cursor.close()
 
         for cog in INITIAL_EXTENSIONS:
             try:
@@ -63,7 +71,6 @@ class main(commands.Bot):
 
 
 def close(bot):
-    bot.cursor.close()
     bot.con.close()
 
 
