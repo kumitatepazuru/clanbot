@@ -24,7 +24,6 @@ class upload(commands.Cog):
 
     @commands.command()
     async def dlf(self, ctx: commands.Context, *args):
-        self.bot.cursor = self.bot.con.self.bot.cursor()
         if await issetup(ctx.guild, self.bot.cursor, ctx.channel, self.logger):
             if len(args) != 2:
                 await ctx.send("自分が使っているファイルなどを共有するコマンド\n\n**使い方**\n,dlf [共有ファイル名] [コメント]")
@@ -58,7 +57,7 @@ class upload(commands.Cog):
                     rn = randomname(8)
                 os.makedirs("./httpd/file/" + rn + "/")
                 fn = "./httpd/file/" + rn + "/" + args[0] + ".zip"
-                self.bot.cursor = self.bot.con.self.bot.cursor()
+
                 with zipfile.ZipFile(fn, "w", zipfile.ZIP_LZMA) as z:
                     self.bot.cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={channel.id}")
                     rows = self.bot.cursor.fetchall()
@@ -87,7 +86,6 @@ class upload(commands.Cog):
 
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
-        self.bot.cursor = self.bot.con.self.bot.cursor()
         self.bot.cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={message.channel.id}")
         rows = self.bot.cursor.fetchall()
         if len(rows) != 0:
