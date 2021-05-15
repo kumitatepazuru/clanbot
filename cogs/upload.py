@@ -66,7 +66,7 @@ class upload(commands.Cog):
                         z.writestr(inf, requests.get(i).content)
                 self.logger.info("file generated URL:" + fn)
                 await channel.delete(reason="ファイルの作成が完了したため")
-                self.bot.cursor.execute(f"SELECT mention_id,upload_id FROM clanbot.guild_data WHERE id={ctx.guild.id}")
+                self.bot.cursor.execute(f"SELECT mention_id,upload_id FROM clanbot.guild_data WHERE guild_id={ctx.guild.id}")
                 rows = self.bot.cursor.fetchall()
                 self.logger.warning(str(rows))
 

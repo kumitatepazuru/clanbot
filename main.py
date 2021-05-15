@@ -2,6 +2,7 @@ import logging
 import os
 import time
 import traceback
+import atexit
 
 import MySQLdb
 import discord
@@ -59,16 +60,17 @@ class main(commands.Bot):
                 await channel.send("restarted. command completed.")
             os.remove("ID_DISCORD_CL_CLAN")
 
-    def __del__(self):
-        self.cursor.close()
-        self.con.close()
+
+def close(bot):
+    bot.cursor.close()
+    bot.con.close()
 
 
 if __name__ == '__main__':
     # with open('token', 'r') as f:
     #     TOKEN = f.readline().rstrip()
-
     intents = discord.Intents.default()
     intents.members = True
     bot = main(command_prefix=',', help_command=None, intents=intents)  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
+    atexit.register(close, bot)
     bot.run(os.environ.get("TOKEN"))  # Botのトークン
