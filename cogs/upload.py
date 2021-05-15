@@ -3,7 +3,6 @@ import logging
 import os
 import random
 import string
-import xml.etree.ElementTree as ET
 import zipfile
 
 import discord
@@ -71,11 +70,11 @@ class upload(commands.Cog):
                 rows = self.bot.cursor.fetchall()
                 for i in rows:
                     ch = self.bot.get_channel(i[2])
-                    root = ET.fromstring(
+                    root = json.loads(
                         requests.get("http://dockerserver_ngrok_1:4040/api/tunnels").content.decode("utf-8"))
                     embed = discord.Embed()
                     embed.add_field(name="ファイルが共有されました!",
-                                    value="ダウンロードURL: " + root[0][2].text + "/file/" + fn + "/" + args[0] + ".zip")
+                                    value="ダウンロードURL: " + root["tunnels"][0]["public_url"] + "/file/" + fn + "/" + args[0] + ".zip")
                     embed.add_field(name="コメント", value=args[1])
                     if i[0] is None:
                         await ch.send(embed=embed)
