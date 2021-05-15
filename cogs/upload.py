@@ -59,7 +59,7 @@ class upload(commands.Cog):
                 fn = "./httpd/file/" + rn + "/" + args[0] + ".zip"
 
                 with zipfile.ZipFile(fn, "w", zipfile.ZIP_LZMA) as z:
-                    self.bot.cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={channel.id}")
+                    self.bot.cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE channel_id={channel.id}")
                     rows = self.bot.cursor.fetchall()
                     await channel.send("送信されたファイルからzipファイルを生成中...")
                     for i in json.loads(rows[0][0]):
@@ -84,9 +84,11 @@ class upload(commands.Cog):
                         guild = self.bot.get_guild(i[1])
                         await ch.send(guild.get_role(i[0]), embed=embed)
 
+                self.bot.cursor.execute(f"DELETE FROM clanbot.upload_channel channel_id={channel.id}")
+
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
-        self.bot.cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={message.channel.id}")
+        self.bot.cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE channel_id={message.channel.id}")
         rows = self.bot.cursor.fetchall()
         if len(rows) != 0:
             for i in message.attachments:
@@ -94,7 +96,7 @@ class upload(commands.Cog):
                 f = json.loads(rows[0][0])
                 f.append(i.url)
                 self.bot.cursor.execute(
-                    "UPDATE clanbot.upload_channel SET url='" + json.dumps(f) + f"' WHERE id={message.channel.id}")
+                    "UPDATE clanbot.upload_channel SET url='" + json.dumps(f) + f"' WHERE channel_id={message.channel.id}")
 
 
 def setup(bot):
