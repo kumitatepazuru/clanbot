@@ -45,6 +45,20 @@ class upload(commands.Cog):
                                                                        overwrites=overwrites)
         cursor.execute(f"INSERT INTO clanbot.upload_channel VALUES ({channel.id},'[]')")
 
+        msg = await channel.send(ctx.author.mention+" こちらに、modファイルを**まとめずに**送信してください。(自動的にまとめられます）\n送り終わったら🆗を押してください")
+        await msg.add_reaction("🆗")
+
+        def check(ren: discord.Reaction, user: discord.User) -> bool:
+            # リアクション先のメッセージや追加された絵文字が適切かどうか判断する。
+            return str(
+                ren.emoji) in "🆗" and ren.message == msg and user == message.author
+
+        reaction, _ = await self.bot.wait_for("reaction_add", check=check)
+        await msg.clear_reactions()
+        cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={channel.id}")
+        rows = cursor.fetchall()
+        await channel.send("\n".join(json.loads(rows[0][0])))
+
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
         cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={message.channel.id}")
