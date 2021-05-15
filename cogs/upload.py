@@ -23,7 +23,7 @@ while not ok and i < 10:
     else:
         cursor = con.cursor()
         cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
-        cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT, url TEXT DEFAULT NULL)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT, url TEXT)")
 
 
 class upload(commands.Cog):
@@ -43,7 +43,7 @@ class upload(commands.Cog):
         }
         channel: discord.TextChannel = await guild.create_text_channel(name=ctx.author.name + "-アップロード",
                                                                        overwrites=overwrites)
-        cursor.execute(f"INSERT INTO clanbot.upload_channel VALUES ({channel.id})")
+        cursor.execute(f"INSERT INTO clanbot.upload_channel VALUES ({channel.id},'[]')")
 
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
