@@ -5,7 +5,6 @@ import random
 import string
 import time
 import zipfile
-from io import BytesIO
 
 import MySQLdb
 import discord
@@ -83,8 +82,7 @@ class upload(commands.Cog):
                 await channel.send("送信されたファイルからzipファイルを生成中...")
                 for i in json.loads(rows[0][0]):
                     inf = zipfile.ZipInfo(os.path.basename(i), (1980, 1, 1, 0, 0, 0))
-                    with BytesIO(requests.get(i).content) as f:
-                        z.writestr(inf, f)
+                    z.writestr(inf, requests.get(i).content)
             self.logger.info("file generated URL:"+fn)
             await channel.send("作成が完了しました")
 
