@@ -38,7 +38,7 @@ class upload(commands.Cog):
                 }
                 channel: discord.TextChannel = await guild.create_text_channel(name=ctx.author.name + "-アップロード",
                                                                                overwrites=overwrites)
-                self.bot.cursor.execute(f"INSERT INTO clanbot.upload_channel VALUES ({channel.id},'[]')")
+                self.bot.cursor.execute(f"INSERT INTO clanbot.upload_channel VALUES (NULL, {channel.id},'[]')")
 
                 msg = await channel.send(
                     ctx.author.mention + " こちらに、modファイルを**まとめずに**送信してください。(自動的にまとめられます）\n送り終わったら🆗を押してください")
