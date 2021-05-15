@@ -50,7 +50,9 @@ class main(commands.Bot):
                     "`upload_id` BIGINT NULL DEFAULT NULL , "
                     "`mcid_id` BIGINT NOT NULL , "
                     "`mod_id` BIGINT NOT NULL , "
-                    "`notification_id` BIGINT NOT NULL  , PRIMARY KEY (`id`))"
+                    "`notification_id` BIGINT NOT NULL  , "
+                    "`clan_id` BIGINT NULL DEFAULT NULL, "
+                    "PRIMARY KEY (`id`))"
                 )
 
         for cog in INITIAL_EXTENSIONS:
