@@ -54,7 +54,7 @@ class upload(commands.Cog):
             f = json.loads(rows[0][0])
             f.append(message.attachments[0].url)
             cursor.execute(
-                f"UPDATE clanbot.upload_channel SET url=" + json.dumps(f) + f" WHERE id={message.channel.id}")
+                "UPDATE clanbot.upload_channel SET url='" + json.dumps(f) + f"' WHERE id={message.channel.id}")
 
     def __del__(self):
         cursor.close()
