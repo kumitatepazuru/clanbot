@@ -55,3 +55,13 @@ async def usedname(name,channel):
         await usedname(name, channel)
     finally:
         driver.quit()
+
+
+async def issetup(guild,cursor,channel):
+    cursor.execute(f"SELECT * FROM clanbot.guild_data WHERE guild_id={guild.id}")
+    rows = cursor.fetchall()
+    if len(rows) == 0:
+        await channel.send("最初に初期セットアップを`,setup` で行ってください。")
+        return False
+    else:
+        return True

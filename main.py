@@ -1,7 +1,9 @@
 import logging
 import os
+import time
 import traceback
 
+import MySQLdb
 import discord
 from discord.ext import commands
 
@@ -19,6 +21,27 @@ class main(commands.Bot):
     def __init__(self, command_prefix, **options):
         super().__init__(command_prefix, **options)
 
+        ok = False
+        i = 0
+
+        while not ok and i < 10:
+            try:
+                self.con = MySQLdb.connect(
+                    user='root',
+                    passwd='docker_sql',
+                    host='dockerserver_mysql_1',
+                    charset="utf8")
+                ok = True
+            except MySQLdb._exceptions.OperationalError:
+                i += 1
+                time.sleep(1)
+                print(f"bootstrap:upload.py:WARN: Can't connect to MySQL server {i}/10")
+            else:
+                self.cursor = self.con.cursor()
+                self.cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
+                self.cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT, url TEXT)")
+                self.cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.guild_data ( `guild_id` BIGINT NOT NULL , `mention_id` BIGINT NULL DEFAULT NULL , `upload_id` BIGINT NULL DEFAULT NULL , `mcid_id` BIGINT NOT NULL , `mod_id` BIGINT NOT NULL , `notification_id` BIGINT NOT NULL )")
+
         for cog in INITIAL_EXTENSIONS:
             try:
                 self.load_extension(cog)
@@ -35,6 +58,10 @@ class main(commands.Bot):
                 channel = self.get_channel(int(f.read().splitlines()[0]))
                 await channel.send("restarted. command completed.")
             os.remove("ID_DISCORD_CL_CLAN")
+
+    def __del__(self):
+        self.cursor.close()
+        self.con.close()
 
 
 if __name__ == '__main__':
