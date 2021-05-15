@@ -50,9 +50,9 @@ class upload(commands.Cog):
         cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={message.channel.id}")
         rows = cursor.fetchall()
         if len(rows) != 0:
-            self.logger.info(message.attachments[0]['url'])
+            self.logger.info(message.attachments[0].url)
             f = json.loads(rows[0][0])
-            f.append(message.attachments[0]['url'])
+            f.append(message.attachments[0].url)
             cursor.execute(
                 f"UPDATE clanbot.upload_channel SET url=" + json.dumps(f) + f" WHERE id={message.channel.id}")
 
