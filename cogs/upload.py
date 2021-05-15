@@ -1,8 +1,16 @@
+import json
 import logging
 
+import MySQLdb
 import discord
 from discord.ext import commands
-import MySQLdb
+
+con = MySQLdb.connect(
+    user='root',
+    passwd='docker_sql',
+    host='dockerserver_mysql_1',
+    charset="utf8")
+cursor = con.cursor()
 
 
 class upload(commands.Cog):
@@ -11,7 +19,7 @@ class upload(commands.Cog):
         self.logger = logging.getLogger(__name__)
 
     @commands.command()
-    async def dlf(self, ctx):
+    async def dlf(self, ctx: commands.Context):
         self.logger.info("started dl man")
         self.logger.info("create new channel " + ctx.author.name + "-アップロード")
         guild: discord.Guild = self.bot.get_guild(ctx.guild.id)
@@ -23,26 +31,25 @@ class upload(commands.Cog):
         channel: discord.TextChannel = await guild.create_text_channel(name=ctx.author.name + "-アップロード",
                                                                        overwrites=overwrites)
 
-        con = MySQLdb.connect(
-            user='root',
-            passwd='docker_sql',
-            host='dockerserver_mysql_1',
-            charset="utf8")
-        cursor = con.cursor()
         cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
-        cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT, url TEXT DEFAULT NULL)")
         cursor.execute(f"INSERT INTO clanbot.upload_channel VALUES ({channel.id})")
-        cursor.execute("SELECT * FROM clanbot.upload_channel")
 
-        # 実行結果をすべて取得する
+    @commands.Cog.listener(name='on_message')
+    async def msg(self, message: discord.Message):
+        cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={message.channel.id}")
         rows = cursor.fetchall()
+        if len(rows) != 0:
+            self.logger.info(message.attachments[0]['url'])
+            f = json.loads(rows[0][0])
+            f.append(message.attachments[0]['url'])
+            cursor.execute(
+                f"UPDATE clanbot.upload_channel SET url=" + json.dumps(f) + f" WHERE id={message.channel.id}")
 
-        # 一行ずつ表示する
-        for row in rows:
-            self.logger.warning(row)
-
+    def __del__(self):
         cursor.close()
         con.close()
+
 
 def setup(bot):
     bot.add_cog(upload(bot))
