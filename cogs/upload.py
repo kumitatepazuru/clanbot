@@ -75,6 +75,7 @@ class upload(commands.Cog):
             fn = randomname(8)
             while os.path.isdir(fn):
                 fn = randomname(8)
+            os.makedirs("./httpd/file/" + fn + "/")
             fn = "./httpd/file/" + fn + "/" + args[0] + ".zip"
             with zipfile.ZipFile(fn, "w", zipfile.ZIP_LZMA) as z:
                 cursor.execute(f"SELECT url FROM clanbot.upload_channel WHERE id={channel.id}")
