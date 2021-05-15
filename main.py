@@ -38,6 +38,7 @@ class main(commands.Bot):
                 time.sleep(1)
                 print(f"bootstrap:upload.py:WARN: Can't connect to MySQL server {i}/10")
             else:
+                # TODO: cursorを呼び出しごとに出す
                 self.cursor = self.con.cursor()
                 self.cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
                 self.cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel (id BIGINT, url TEXT)")

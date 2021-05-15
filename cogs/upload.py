@@ -3,6 +3,7 @@ import logging
 import os
 import random
 import string
+import xml.etree.ElementTree as ET
 import zipfile
 
 import discord
@@ -24,7 +25,7 @@ class upload(commands.Cog):
 
     @commands.command()
     async def dlf(self, ctx: commands.Context, *args):
-        if await issetup(ctx.guild, self.bot.cursor, ctx.channel,self.logger):
+        if await issetup(ctx.guild, self.bot.cursor, ctx.channel, self.logger):
             if len(args) != 2:
                 await ctx.send("自分が使っているファイルなどを共有するコマンド\n\n**使い方**\n,dlf [共有ファイル名] [コメント]")
             else:
@@ -66,9 +67,21 @@ class upload(commands.Cog):
                         z.writestr(inf, requests.get(i).content)
                 self.logger.info("file generated URL:" + fn)
                 await channel.delete(reason="ファイルの作成が完了したため")
-                self.bot.cursor.execute(f"SELECT mention_id,upload_id FROM clanbot.guild_data WHERE guild_id={ctx.guild.id}")
+                self.bot.cursor.execute("SELECT mention_id,guild_id,upload_id FROM clanbot.guild_data")
                 rows = self.bot.cursor.fetchall()
-                self.logger.warning(str(rows))
+                for i in rows:
+                    ch = self.bot.get_channel(i[2])
+                    root = ET.fromstring(
+                        requests.get("http://dockerserver_ngrok_1:4040/api/tunnels").content.decode("utf-8"))
+                    embed = discord.Embed()
+                    embed.add_field(name="ファイルが共有されました!",
+                                    value="ダウンロードURL: " + root[0][2].text + "/file/" + fn + "/" + args[0] + ".zip")
+                    embed.add_field(name="コメント", value=args[1])
+                    if i[0] is None:
+                        await ch.send(embed=embed)
+                    else:
+                        guild = self.bot.get_guild(i[1])
+                        await ch.send(guild.get_role(i[0]), embed=embed)
 
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
