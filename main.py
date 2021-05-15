@@ -7,7 +7,8 @@ from discord.ext import commands
 
 INITIAL_EXTENSIONS = [
     "cogs.restart",
-    "cogs.oauth"
+    "cogs.oauth",
+    "cogs.upload"
 ]
 logging.basicConfig(level=logging.INFO,
                     format="\033[38;5;4m%(asctime)s \033[38;5;10m[%(module)s] [%(name)s]=>L%(lineno)d "
