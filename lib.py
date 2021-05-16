@@ -62,6 +62,7 @@ async def issetup(guild,cursor,channel,logger,send=True):
     cursor.execute(f"SELECT * FROM clanbot.guild_data WHERE guild_id={guild.id}")
     rows = cursor.fetchall()
     if len(rows) == 0:
+        logger.info("rows: "+str(len(rows)))
         if send:
             await channel.send("最初に初期セットアップを`,setup` で行ってください。")
         return False
