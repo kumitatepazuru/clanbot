@@ -15,7 +15,7 @@ class cmd_setup(commands.Cog):
     @commands.command(name="setup")
     async def setup_cmd(self, ctx: commands.Context):
         if ctx.author.guild_permissions.administrator:
-            if not issetup(ctx.guild, self.bot.cursor, ctx.channel, self.logger, False):
+            if not await issetup(ctx.guild, self.bot.cursor, ctx.channel, self.logger, False):
                 guild: discord.Guild = self.bot.get_guild(ctx.guild.id)
                 overwrites = {
                     guild.default_role: discord.PermissionOverwrite(read_messages=False),
