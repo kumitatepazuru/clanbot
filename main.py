@@ -76,6 +76,7 @@ class main(commands.Bot):
 
     @commands.Cog.listener(name='on_guild_join')
     async def join(self, guild: discord.Guild):
+        logging.info("server joined guild id:"+str(guild.id))
         if guild.system_channel is not None:
             channel = guild.system_channel
             await channel.send("こんにちは!\nclanbotです。これは、主にminecraftのマルチプレイサーバーにおけるチーム(クラン)のdiscordサーバーの運営に役立てるbotです。\n"
