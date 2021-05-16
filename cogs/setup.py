@@ -52,7 +52,7 @@ class cmd_setup(commands.Cog):
         self.logger.info(str(ctx.message.role_mentions))
         if len(ctx.message.channel_mentions) == 3 and len(ctx.message.role_mentions) == 1:
             self.bot.cursor.execute("INSERT INTO clanbot.guild_data (`id`, `guild_id`, `mention_id`, `upload_id`, `mcid_id`, `mod_id`, `notification_id`, `clan_id`) VALUES "
-                                    f"(NULL, {ctx.guild.id}, NULL, NULL, {ctx.message.channel_mentions[0].id}, {ctx.message.channel_mentions[1].id}, {ctx.message.channel_mentions[2].id}, {ctx.message.channel_mentions[3].id})")
+                                    f"(NULL, {ctx.guild.id}, NULL, NULL, {ctx.message.channel_mentions[0].id}, {ctx.message.channel_mentions[1].id}, {ctx.message.channel_mentions[2].id}, {ctx.message.role_mentions[0].id})")
             await ctx.send("登録しました。")
         else:
             await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
