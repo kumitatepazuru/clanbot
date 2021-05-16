@@ -92,6 +92,7 @@ if __name__ == '__main__':
     #     TOKEN = f.readline().rstrip()
     intents = discord.Intents.default()
     intents.members = True
+    intents.guilds = True
     bot = main(command_prefix=',', help_command=None, intents=intents)  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
     atexit.register(close, bot)
     bot.run(os.environ.get("TOKEN"))  # Botのトークン
