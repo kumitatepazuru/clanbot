@@ -41,7 +41,8 @@ class main(commands.Bot):
                 self.con.autocommit(True)
                 self.cursor = self.con.cursor()
                 self.cursor.execute("CREATE DATABASE IF NOT EXISTS clanbot")
-                self.cursor.execute("CREATE TABLE IF NOT EXISTS clanbot.upload_channel ( `id` INT NOT NULL AUTO_INCREMENT , `channel_id` BIGINT NOT NULL , `url` TEXT NOT NULL , PRIMARY KEY (`id`))")
+                self.cursor.execute(
+                    "CREATE TABLE IF NOT EXISTS clanbot.upload_channel ( `id` INT NOT NULL AUTO_INCREMENT , `channel_id` BIGINT NOT NULL , `url` TEXT NOT NULL , PRIMARY KEY (`id`))")
                 self.cursor.execute(
                     "CREATE TABLE IF NOT EXISTS clanbot.guild_data "
                     "( `id` INT NOT NULL AUTO_INCREMENT,"
@@ -71,6 +72,13 @@ class main(commands.Bot):
                 channel = self.get_channel(int(f.read().splitlines()[0]))
                 await channel.send("restarted. command completed.")
             os.remove("ID_DISCORD_CL_CLAN")
+
+    @commands.Cog.listener(name='on_guild_join')
+    async def join(self, guild: discord.Guild):
+        if guild.system_channel is not None:
+            channel = guild.system_channel
+            await channel.send("こんにちは!\nclanbotです。これは、主にminecraftのマルチプレイサーバーにおけるチーム(クラン)のdiscordサーバーの運営に役立てるbotです。\n"
+                               "まずは、初期設定をしましょう。 `,setup` で初期設定を実行できます(専用のチャンネルが作成されます)")
 
 
 def close(bot):
