@@ -12,8 +12,8 @@ class cmd_setup(commands.Cog):
         self.bot = bot
         self.logger = logging.getLogger(__name__)
 
-    @commands.command()
-    async def setup(self, ctx: commands.Context):
+    @commands.command(name="setup")
+    async def setup_cmd(self, ctx: commands.Context):
         if ctx.author.guild_permissions.administrator:
             if not issetup(ctx.guild, self.bot.cursor, ctx.channel, self.logger, False):
                 guild: discord.Guild = self.bot.get_guild(ctx.guild.id)
