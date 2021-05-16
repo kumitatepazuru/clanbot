@@ -49,7 +49,10 @@ class oauth(commands.Cog):
                     self.logger.info("completed authentication.")
                     await channel.delete(reason="ユーザーに問題はなく、それをユーザー自身が同意したため、認証用チャンネルを削除した")
                     if rows[1] is not None:
-                        await message.author.add_roles(message.guild.get_role(rows[1]))
+                        try:
+                            await message.author.add_roles(message.guild.get_role(rows[1]))
+                        except discord.errors.Forbidden:
+                            await self.bot.get_channel(rows[3]).send("@everyone 内部エラー：クランロールが付与できませんでした。\nbotが操作できないロールの可能性があります。設定を見直してください。")
                     await self.bot.get_channel(rows[2]).send(message.author.mention + "メンバーへようこそ！")
                 else:
                     self.logger.warning("not used this mcid.")
