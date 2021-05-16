@@ -47,7 +47,7 @@ class cmd_setup(commands.Cog):
 
     @set.command()
     async def setup(self, ctx):
-        self.logger.warning(str(ctx.message.channel.channel_mentions))
+        self.logger.warning(str(ctx.message.channel_mentions))
 
 
 def setup(bot):
