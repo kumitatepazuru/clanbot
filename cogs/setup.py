@@ -1,6 +1,7 @@
 import logging
 
 import discord
+import typing
 from discord.ext import commands
 
 from lib import issetup
@@ -49,30 +50,31 @@ class cmd_setup(commands.Cog):
                            "`,set upload [チャンネル or off]` ファイル共有時に通知をするチャンネルを設定(offで解除)")
 
     @set.command()
-    async def setup(self, ctx):
-        self.logger.info(str(ctx.message.channel_mentions))
-        self.logger.info(str(ctx.message.role_mentions))
-        if len(ctx.message.channel_mentions) == 3 and len(ctx.message.role_mentions) == 1:
+    async def setup(self, ctx, mcid: typing.Optional[discord.TextChannel] = None,
+                    mod: typing.Optional[discord.TextChannel] = None,
+                    notification: typing.Optional[discord.TextChannel] = None,
+                    clan: typing.Optional[discord.Role] = None):
+        if mcid != None and mod is not None and notification is not None and clan is not None:
             self.bot.cursor.execute(
                 "INSERT INTO clanbot.guild_data (`id`, `guild_id`, `mention_id`, `upload_id`, `mcid_id`, `mod_id`, `notification_id`, `clan_id`) VALUES "
-                f"(NULL, {ctx.guild.id}, NULL, NULL, {ctx.message.channel_mentions[0].id}, {ctx.message.channel_mentions[1].id}, {ctx.message.channel_mentions[2].id}, {ctx.message.role_mentions[0].id})")
+                f"(NULL, {ctx.guild.id}, NULL, NULL, {mcid.id}, {mod.id}, {notification.id}, {clan.id})")
             await ctx.send("登録しました。")
 
             await ctx.send(
-                "\n\nオプション機能として\n通知時に任意のロールにメンションをする設定 `,set mention [ロール or off]`\nファイル共有時に通知をするチャンネルを設定 `,set upload [チャンネル or off]`\n"
+                "\n\nオプション機能として\n通知時に任意のロールにメンションをする設定 `,set mention ([ロール])`\nファイル共有時に通知をするチャンネルを設定 `,set upload ([チャンネル])`\n"
                 "があります。ぜひご活用ください。")
         else:
             await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
                            "`,set setup [mcidを記入しておくチャンネル] [運営のみが参照できるチャンネル] [botの重要な情報等の通知を行うチャンネル] [クラン(チーム)用ロール]` 初期設定を行う")
 
     @set.command()
-    async def mention(self, ctx, arg):
+    async def mention(self, ctx, role: typing.Union[discord.Role, str]):
         if issetup(ctx.guild, self.bot.cursor, ctx.channel, self.logger):
             if len(ctx.message.role_mentions) == 1:
                 self.bot.cursor.execute(
-                    f"UPDATE `guild_data` SET `mention_id` ={ctx.message.role_mentions[0].id}  WHERE guild_id={ctx.guild}")
+                    f"UPDATE `guild_data` SET `mention_id` ={role.id}  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
-            elif arg == "off":
+            elif role == "off":
                 self.bot.cursor.execute(
                     f"UPDATE `guild_data` SET `mention_id` =NULL  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
@@ -81,13 +83,13 @@ class cmd_setup(commands.Cog):
                                "`,set mention [ロール or off]` 通知時に任意のロールにメンションをするロールを指定(offで解除)")
 
     @set.command()
-    async def upload(self, ctx, arg):
+    async def upload(self, ctx, channel: typing.Union[discord.TextChannel, str]):
         if issetup(ctx.guild, self.bot.cursor, ctx.channel, self.logger):
             if len(ctx.message.channel_mentions) == 1:
                 self.bot.cursor.execute(
-                    f"UPDATE `guild_data` SET `upload_id` ={ctx.message.channel_mentions[0].id}  WHERE guild_id={ctx.guild}")
+                    f"UPDATE `guild_data` SET `upload_id` ={channel.id}  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
-            elif arg == "off":
+            elif channel == "off":
                 self.bot.cursor.execute(
                     f"UPDATE `guild_data` SET `upload_id` =NULL  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
