@@ -61,7 +61,7 @@ class cmd_setup(commands.Cog):
             await ctx.send("登録しました。")
 
             await ctx.send(
-                "\n\nオプション機能として\n通知時に任意のロールにメンションをする設定 `,set mention ([ロール])`\nファイル共有時に通知をするチャンネルを設定 `,set upload ([チャンネル])`\n"
+                "\n\nオプション機能として\n通知時に任意のロールにメンションをする設定 `,set mention [ロール or off]`\nファイル共有時に通知をするチャンネルを設定 `,set upload [ロール or off]`\n"
                 "があります。ぜひご活用ください。")
         else:
             await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"

@@ -12,7 +12,8 @@ INITIAL_EXTENSIONS = [
     "cogs.restart",
     "cogs.oauth",
     "cogs.upload",
-    "cogs.setup"
+    "cogs.setup",
+    "cogs.vote"
 ]
 logging.basicConfig(level=logging.INFO,
                     format="\033[38;5;4m%(asctime)s \033[38;5;10m[%(module)s] [%(name)s]=>L%(lineno)d "
