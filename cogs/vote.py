@@ -1,4 +1,5 @@
 import logging
+import os
 
 import discord
 from discord.ext import commands
@@ -12,10 +13,13 @@ class vote(commands.Cog):
         self.bot = bot
         self.logger = logging.getLogger(__name__)
 
-    @commands.command(alias=["ss"])
+    @commands.command(aliases=["ss"])
     async def showservers(self,ctx):
-        with open("./srt/screenshot.jpg","rb") as f:
-            ctx.send(file=discord.File(f,filename="screenshot.jpg"))
+        if os.path.isfile("./srt/screenshot.jpg"):
+            with open("./srt/screenshot.jpg","rb") as f:
+                ctx.send(file=discord.File(f,filename="screenshot.jpg"))
+        else:
+            ctx.send("申しわかりません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
 
 
 def setup(bot):
