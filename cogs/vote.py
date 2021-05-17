@@ -21,7 +21,7 @@ class vote(commands.Cog):
             im.crop((341,217,681,322))
             img_bytes = BytesIO()
             im.save(img_bytes,format="PNG")
-            await ctx.send(file=discord.File(img_bytes,filename="screenshot.jpg"))
+            await ctx.send(str(len(img_bytes.getvalue())),file=discord.File(img_bytes,filename="screenshot.jpg"))
         else:
             await ctx.send("申しわかりません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
 
