@@ -1,10 +1,11 @@
 import logging
 import os
+from io import BytesIO
 
 import discord
 from discord.ext import commands
 
-from lib import usedname
+from PIL import Image
 from main import main
 
 
@@ -16,8 +17,11 @@ class vote(commands.Cog):
     @commands.command(aliases=["ss"])
     async def showservers(self,ctx):
         if os.path.isfile("./srt/screenshot.jpg"):
-            with open("./srt/screenshot.jpg","rb") as f:
-                await ctx.send(file=discord.File(f,filename="screenshot.jpg"))
+            im = Image.open("./srt/screenshot.jpg")
+            im.crop((341,217,681,322))
+            img_bytes = BytesIO()
+            im.save(img_bytes,format="PNG")
+            await ctx.send(file=discord.File(img_bytes,filename="screenshot.jpg"))
         else:
             await ctx.send("申しわかりません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
 
