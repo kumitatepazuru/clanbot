@@ -17,9 +17,9 @@ class vote(commands.Cog):
     async def showservers(self,ctx):
         if os.path.isfile("./srt/screenshot.jpg"):
             with open("./srt/screenshot.jpg","rb") as f:
-                ctx.send(file=discord.File(f,filename="screenshot.jpg"))
+                await ctx.send(file=discord.File(f,filename="screenshot.jpg"))
         else:
-            ctx.send("申しわかりません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
+            await ctx.send("申しわかりません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
 
 
 def setup(bot):
