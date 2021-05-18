@@ -51,10 +51,12 @@ class vote(commands.Cog):
         else:
             await ctx.send("申し訳ありません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
 
-    @tasks.loop(seconds=60)
+    def cog_unload(self):
+        self.loop.cancel()
+
+    @tasks.loop(seconds=1)
     async def loop(self):
-        channel = self.bot.get_channel(838623819526438963)
-        await channel.send('時間だよ')
+        self.logger.info("unti")
 
 
 def setup(bot):
