@@ -34,6 +34,7 @@ class vote(commands.Cog):
             l = []
             for i in range(9):
                 p = im[363+i*36,295]
+                self.logger.info(str(p))
                 l.append(str(np.argmax(p)))
             await ctx.send(" ".join(l))
         else:
