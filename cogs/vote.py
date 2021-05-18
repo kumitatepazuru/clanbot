@@ -15,6 +15,8 @@ class vote(commands.Cog):
         self.bot = bot
         self.logger = logging.getLogger(__name__)
         self.loop.start()
+        self.server = []
+        self.old = []
 
     @commands.command(aliases=["ss"])
     async def showservers(self, ctx):
@@ -56,6 +58,25 @@ class vote(commands.Cog):
 
     @tasks.loop(seconds=1)
     async def loop(self):
+        if os.path.isfile("./srt/screenshot.jpg"):
+            im = np.array(Image.open("./srt/screenshot.jpg"))
+            self.old = self.server
+            for i in range(9):
+                p = im[295, 363 + i * 36]
+                if np.sum(p) > 100:
+                    self.server.append(str(np.argmax(p) + 1))
+                else:
+                    self.server.append("0")
+            if len(self.old) != 0:
+                for i,j in zip(self.old,self.server):
+                    if i != "2" and j == "2":
+                        cursor = self.bot.con.cursor()
+                        cursor.execute("SELECT mention_id,notification_id FROM clanbot.guild_data")
+                        rows = cursor.fetchall()
+                        for i in rows:
+                            ch = self.bot.get_channel(i[1])
+                            await ch.send("【お知らせ】\nAnnihilationに新しいサーバーが作成されました。")
+
         ch = self.bot.get_channel(838623819526438963)
         # await ch.send("test")
 
