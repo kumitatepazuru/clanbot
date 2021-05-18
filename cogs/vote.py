@@ -25,7 +25,7 @@ class vote(commands.Cog):
             img_bytes.seek(0)
             await ctx.send("今のANNIサーバー一覧\n\n**表示の見方**\n緑: 参加できます\n青: phase 3です。プレミアムの方は参加できます\n赤: phase 4以上で参加できません。", file=discord.File(img_bytes, filename="screenshot.jpg"))
         else:
-            await ctx.send("申しわかりません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
+            await ctx.send("申し訳ありません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
 
     @commands.command(aliases=["ts"])
     async def textservers(self,ctx):
@@ -37,7 +37,7 @@ class vote(commands.Cog):
                 l.append(str(np.argmax(p)))
             await ctx.send(" ".join(l))
         else:
-            await ctx.send("申しわかりません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
+            await ctx.send("申し訳ありません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
 
 
 def setup(bot):
