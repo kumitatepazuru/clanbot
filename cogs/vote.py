@@ -57,8 +57,12 @@ class vote(commands.Cog):
     @tasks.loop(seconds=1)
     async def loop(self):
         ch = self.bot.get_channel(838623819526438963)
-        ch.send("test")
+        await ch.send("test")
 
+    @loop.before_loop
+    async def before_printer(self):
+        self.logger.info('waiting...')
+        await self.bot.wait_until_ready()
 
 def setup(bot):
     bot.add_cog(vote(bot))
