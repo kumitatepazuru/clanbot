@@ -14,6 +14,7 @@ class vote(commands.Cog):
     def __init__(self, bot: main):
         self.bot = bot
         self.logger = logging.getLogger(__name__)
+        self.loop.start()
 
     @commands.command(aliases=["ss"])
     async def showservers(self, ctx):
