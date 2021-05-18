@@ -56,7 +56,8 @@ class vote(commands.Cog):
 
     @tasks.loop(seconds=1)
     async def loop(self):
-        self.logger.info("unti")
+        ch = self.bot.get_channel(838623819526438963)
+        ch.send("test")
 
 
 def setup(bot):
