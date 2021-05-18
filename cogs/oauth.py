@@ -14,8 +14,10 @@ class oauth(commands.Cog):
 
     @commands.Cog.listener(name='on_message')
     async def msg(self, message: discord.Message):
-        self.bot.cursor.execute(f"SELECT mcid_id,clan_id,notification_id,mod_id FROM clanbot.guild_data WHERE guild_id={message.guild.id}")
-        rows = self.bot.cursor.fetchall()
+        cursor = self.bot.con.cursor()
+        cursor.execute(f"SELECT mcid_id,clan_id,notification_id,mod_id FROM clanbot.guild_data WHERE guild_id={message.guild.id}")
+        rows = cursor.fetchall()
+        cursor.close()
         if len(rows) != 0:
             rows = rows[0]
             if message.channel.id == rows[0]:
