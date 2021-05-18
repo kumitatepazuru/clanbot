@@ -34,7 +34,7 @@ class vote(commands.Cog):
             l = []
             for i in range(9):
                 p = im[363+i*36,295]
-                l.append(np.argmax(p))
+                l.append(str(np.argmax(p)))
             await ctx.send(" ".join(l))
         else:
             await ctx.send("申しわかりません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
