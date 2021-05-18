@@ -33,9 +33,11 @@ class vote(commands.Cog):
             im = np.array(Image.open("./srt/screenshot.jpg"))
             l = []
             for i in range(9):
-                p = im[363+i*36,295]
-                self.logger.info(str(p))
-                l.append(str(np.argmax(p)))
+                p = im[295,363+i*36]
+                if np.sum(p) > 100:
+                    l.append(str(np.argmax(p)+1))
+                else:
+                    l.append("0")
             await ctx.send(" ".join(l))
         else:
             await ctx.send("申し訳ありません。ただいまANNIサーバー検知システムを起動中(再起動中)です。もうしばらく(最大10分)お待ちください。")
