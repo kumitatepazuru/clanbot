@@ -62,12 +62,15 @@ class vote(commands.Cog):
             im = np.array(Image.open("./srt/screenshot.jpg"))
             self.old = self.server
             self.server = []
-            for i in range(9):
-                p = im[295, 363 + i * 36]
-                if np.sum(p) > 100:
-                    self.server.append(str(np.argmax(p) + 1))
-                else:
-                    self.server.append("0")
+            try:
+                for i in range(9):
+                    p = im[295, 363 + i * 36]
+                    if np.sum(p) > 100:
+                        self.server.append(str(np.argmax(p) + 1))
+                    else:
+                        self.server.append("0")
+            except IndexError:
+                self.logger.warning("fail to file load.")
             if len(self.old) != 0:
                 print(self.old, self.server)
                 for i, j in zip(self.old, self.server):
