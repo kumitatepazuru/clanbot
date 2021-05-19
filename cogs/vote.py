@@ -60,6 +60,7 @@ class vote(commands.Cog):
     async def loop(self):
         if os.path.isfile("./srt/screenshot.jpg"):
             im = np.array(Image.open("./srt/screenshot.jpg"))
+            self.logger.warning(im.shape)
             self.old = self.server
             for i in range(9):
                 p = im[295, 363 + i * 36]
