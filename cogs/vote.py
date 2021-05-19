@@ -60,7 +60,6 @@ class vote(commands.Cog):
     async def loop(self):
         if os.path.isfile("./srt/screenshot.jpg"):
             im = np.array(Image.open("./srt/screenshot.jpg"))
-            self.logger.warning(im.shape)
             self.old = self.server
             for i in range(9):
                 p = im[295, 363 + i * 36]
@@ -69,7 +68,8 @@ class vote(commands.Cog):
                 else:
                     self.server.append("0")
             if len(self.old) != 0:
-                for i,j in zip(self.old,self.server):
+                print(self.old, self.server)
+                for i, j in zip(self.old, self.server):
                     if i != "2" and j == "2":
                         cursor = self.bot.con.cursor()
                         cursor.execute("SELECT mention_id,notification_id FROM clanbot.guild_data")
@@ -85,6 +85,7 @@ class vote(commands.Cog):
     async def before_printer(self):
         self.logger.info('waiting...')
         await self.bot.wait_until_ready()
+
 
 def setup(bot):
     bot.add_cog(vote(bot))
