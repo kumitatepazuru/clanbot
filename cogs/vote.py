@@ -14,7 +14,7 @@ class vote(commands.Cog):
     def __init__(self, bot: main):
         self.bot = bot
         self.logger = logging.getLogger(__name__)
-        self.loop.start()
+        # self.loop.start()
         self.server = []
         self.old = []
 
