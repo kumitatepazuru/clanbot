@@ -56,39 +56,39 @@ class vote(commands.Cog):
     def cog_unload(self):
         self.loop.cancel()
 
-    # @tasks.loop(seconds=1)
-    # async def loop(self):
-    #     if os.path.isfile("./srt/screenshot.jpg"):
-    #         im = np.array(Image.open("./srt/screenshot.jpg"))
-    #         self.old = self.server
-    #         self.server = []
-    #         try:
-    #             for i in range(9):
-    #                 p = im[295, 363 + i * 36]
-    #                 if np.sum(p) > 100:
-    #                     self.server.append(str(np.argmax(p) + 1))
-    #                 else:
-    #                     self.server.append("0")
-    #         except IndexError:
-    #             self.logger.warning("fail to file load.")
-    #         self.logger.info("")
-    #         if len(self.old) != 0:
-    #             # print(self.old, self.server)
-    #             if self.old.count("2") < self.server.count("2"):
-    #                 cursor = self.bot.con.cursor()
-    #                 cursor.execute("SELECT mention_id,notification_id FROM clanbot.guild_data")
-    #                 rows = cursor.fetchall()
-    #                 for i in rows:
-    #                     ch = self.bot.get_channel(i[1])
-    #                     await ch.send("【お知らせ】\nAnnihilationに新しいサーバーが作成されました。")
-    #
-    #     ch = self.bot.get_channel(838623819526438963)
-    #     # await ch.send("test")
-    #
-    # @loop.before_loop
-    # async def before_printer(self):
-    #     self.logger.info('waiting...')
-    #     await self.bot.wait_until_ready()
+    @tasks.loop(seconds=1)
+    async def loop(self):
+        if os.path.isfile("./srt/screenshot.jpg"):
+            im = np.array(Image.open("./srt/screenshot.jpg"))
+            self.old = self.server
+            self.server = []
+            try:
+                for i in range(9):
+                    p = im[295, 363 + i * 36]
+                    if np.sum(p) > 100:
+                        self.server.append(str(np.argmax(p) + 1))
+                    else:
+                        self.server.append("0")
+            except IndexError:
+                self.logger.warning("fail to file load.")
+            self.logger.info("")
+            if len(self.old) != 0:
+                print(self.old.count("2"), self.server.count("2"))
+                # if self.old.count("2") < self.server.count("2"):
+                #     cursor = self.bot.con.cursor()
+                #     cursor.execute("SELECT mention_id,notification_id FROM clanbot.guild_data")
+                #     rows = cursor.fetchall()
+                #     for i in rows:
+                #         ch = self.bot.get_channel(i[1])
+                #         await ch.send("【お知らせ】\nAnnihilationに新しいサーバーが作成されました。")
+
+        ch = self.bot.get_channel(838623819526438963)
+        # await ch.send("test")
+
+    @loop.before_loop
+    async def before_printer(self):
+        self.logger.info('waiting...')
+        await self.bot.wait_until_ready()
 
 
 def setup(bot):
