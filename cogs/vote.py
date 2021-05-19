@@ -14,7 +14,7 @@ class vote(commands.Cog):
     def __init__(self, bot: main):
         self.bot = bot
         self.logger = logging.getLogger(__name__)
-        # self.loop.start()
+        self.loop.start()
         self.server = []
         self.old = []
 
@@ -71,9 +71,8 @@ class vote(commands.Cog):
                         self.server.append("0")
             except IndexError:
                 self.logger.warning("fail to file load.")
-            self.logger.info("")
             if len(self.old) != 0:
-                print(self.old.count("2"), self.server.count("2"))
+                self.logger.info(self.old.count("2"), self.server.count("2"))
                 # if self.old.count("2") < self.server.count("2"):
                 #     cursor = self.bot.con.cursor()
                 #     cursor.execute("SELECT mention_id,notification_id FROM clanbot.guild_data")
