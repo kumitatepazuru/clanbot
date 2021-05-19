@@ -61,6 +61,7 @@ class vote(commands.Cog):
         if os.path.isfile("./srt/screenshot.jpg"):
             im = np.array(Image.open("./srt/screenshot.jpg"))
             self.old = self.server
+            self.server = []
             for i in range(9):
                 p = im[295, 363 + i * 36]
                 if np.sum(p) > 100:
