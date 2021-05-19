@@ -72,7 +72,7 @@ class vote(commands.Cog):
             except IndexError:
                 self.logger.warning("fail to file load.")
             if len(self.old) != 0:
-                self.logger.info(self.old.count("2"), self.server.count("2"))
+                self.logger.info(str(self.old.count("2"))+" "+str(self.server.count("2")))
                 # if self.old.count("2") < self.server.count("2"):
                 #     cursor = self.bot.con.cursor()
                 #     cursor.execute("SELECT mention_id,notification_id FROM clanbot.guild_data")
