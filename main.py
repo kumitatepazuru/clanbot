@@ -11,7 +11,7 @@ from discord.ext import commands
 INITIAL_EXTENSIONS = [
     "cogs.restart",
     "cogs.oauth",
-    "cogs.upload",
+    "cogs.fileman",
     "cogs.setup",
     "cogs.vote"
 ]
