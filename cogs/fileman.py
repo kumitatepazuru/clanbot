@@ -3,6 +3,7 @@ import logging
 import os
 import random
 import string
+import time
 import zipfile
 
 import discord
@@ -102,6 +103,44 @@ class upload(commands.Cog):
                 cursor.execute(
                     "UPDATE clanbot.upload_channel SET url='" + json.dumps(f) + f"' WHERE channel_id={message.channel.id}")
         cursor.close()
+
+    async def gigafile(self,ctx,url:str):
+        """ギガファイル便からzipファイルを入手して永久保存をする。そして、botを入れているサーバーにURLとともに通知をする"""
+        resp = requests.head(url, allow_redirects=False)
+        if 'Location' in resp.headers:
+            url = resp.headers['Location']
+        url = os.path.dirname(url) + "/dl_zip.php?file=" + os.path.basename(url)
+        file_size = int(requests.head(url).headers["content-length"])
+
+        res = requests.get(url, stream=True)
+        if res.status_code == 200:
+            if res.content != """<!DOCTYPE html>
+    <html lang="ja">
+        <head>
+            <meta charset="UTF-8">
+        </head>
+        <body>
+            NO FILE
+        </body>
+    </html>""":
+                per = 0
+                msg:discord.Message = await ctx.send(f"ファイルをダウンロード中です。これにはかなりの時間を要する場合があります(ネット遅い)\n{per}/{file_size}(B)")
+                rn = randomname(8)
+                while os.path.isdir(rn):
+                    rn = randomname(8)
+                os.makedirs("./httpd/file/" + rn + "/")
+                t = time.time()
+                with open("./httpd/file/" + rn + "/gigafile.zip", 'wb') as file:
+                    for chunk in res.iter_content(chunk_size=1024):
+                        file.write(chunk)
+                        per += len(chunk)
+                        if time.time()-t > 3:
+                            await msg.edit(content=f"ファイルをダウンロード中です。これにはかなりの時間を要する場合があります(ネット遅い)\n{per}/{file_size}(B)")
+                    await msg.edit(content="完了しました。")
+            else:
+                await ctx.send("ファイルが見つかりません。ギガファイル便にあるzipにまとめる機能で作成されたファイルがあるリンクのみ対応しています。ご了承ください。")
+        else:
+            await ctx.send("申し訳ありませんが、ギガファイル便側で問題が発生している模様です。しばらくたってからもう一度試してください。")
 
 
 def setup(bot):

@@ -72,12 +72,12 @@ class vote(commands.Cog):
             except IndexError:
                 self.logger.warning("fail to file load.")
             if len(self.old) != 0:
-                self.logger.info(str(self.old.count("2"))+" "+str(self.server.count("2")))
+                # self.logger.info(str(self.old.count("2"))+" "+str(self.server.count("2")))
                 if self.old.count("2") < self.server.count("2"):
                     cursor = self.bot.con.cursor()
                     cursor.execute("SELECT mention_id,notification_id FROM clanbot.guild_data")
                     rows = cursor.fetchall()
-                    rows = [[0,844673296212688927]]
+                    # rows = [[0,844673296212688927]]
                     for i in rows:
                         ch = self.bot.get_channel(i[1])
                         await ch.send("【お知らせ】\nAnnihilationに新しいサーバーが作成されました。")

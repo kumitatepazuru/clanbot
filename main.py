@@ -20,6 +20,18 @@ logging.basicConfig(level=logging.INFO,
                            "\033[38;5;14m[%(levelname)s] \033[0m%(message)s")
 
 
+class HelpCommand(commands.DefaultHelpCommand):
+    def __init__(self):
+        super().__init__()
+        self.commands_heading = "コマンド"
+        self.no_category = "その他"
+        self.command_attrs["help"] = "コマンド一覧と簡単な説明を表示"
+
+    def get_ending_note(self):
+        return (f"各コマンドの説明: ,help <コマンド名>\n"
+                f"各カテゴリの説明: ,help <カテゴリ名>\n")
+
+
 class main(commands.Bot):
     def __init__(self, command_prefix, **options):
         super().__init__(command_prefix, **options)
@@ -76,7 +88,6 @@ class main(commands.Bot):
                 await channel.send("restarted. command completed.")
             os.remove("ID_DISCORD_CL_CLAN")
 
-    @commands.Cog.listener(name='on_guild_join')
     async def join(self, guild: discord.Guild):
         logging.info("server joined guild id:"+str(guild.id))
         if guild.system_channel is not None:
@@ -96,6 +107,6 @@ if __name__ == '__main__':
     intents = discord.Intents.default()
     intents.members = True
     intents.guilds = True
-    bot = main(command_prefix=',', help_command=None, intents=intents)  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
+    bot = main(command_prefix=',', intents=intents, help_command=HelpCommand())  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
     atexit.register(close, bot)
     bot.run(os.environ.get("TOKEN"))  # Botのトークン
