@@ -111,7 +111,8 @@ class upload(commands.Cog):
         if 'Location' in resp.headers:
             url = resp.headers['Location']
         url = os.path.dirname(url) + "/dl_zip.php?file=" + os.path.basename(url)
-        file_size = int(requests.head(url).headers["content-length"])
+        # file_size = int(requests.head(url).headers["content-length"])
+        file_size = 0
 
         res = requests.get(url, stream=True)
         if res.status_code == 200:
