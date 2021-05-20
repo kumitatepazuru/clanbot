@@ -104,6 +104,7 @@ class upload(commands.Cog):
                     "UPDATE clanbot.upload_channel SET url='" + json.dumps(f) + f"' WHERE channel_id={message.channel.id}")
         cursor.close()
 
+    @commands.command(aliases=["gg"])
     async def gigafile(self,ctx,url:str):
         """ギガファイル便からzipファイルを入手して永久保存をする。そして、botを入れているサーバーにURLとともに通知をする"""
         resp = requests.head(url, allow_redirects=False)
