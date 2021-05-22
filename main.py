@@ -67,6 +67,7 @@ class main(commands.Bot):
                     "`mod_id` BIGINT NOT NULL , "
                     "`notification_id` BIGINT NOT NULL  , "
                     "`clan_id` BIGINT NULL DEFAULT NULL, "
+                    "`new_server_id` BIGINT NULL DEFAULT NULL, "
                     "PRIMARY KEY (`id`))"
                 )
                 cursor.close()

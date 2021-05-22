@@ -15,6 +15,7 @@ class cmd_setup(commands.Cog):
 
     @commands.command(name="setup")
     async def setup_cmd(self, ctx: commands.Context):
+        """初期設定ウィザードを実行する"""
         if ctx.author.guild_permissions.administrator:
             cursor = self.bot.con.cursor()
             if not await issetup(ctx.guild, cursor, ctx.channel, self.logger, False):
@@ -56,6 +57,7 @@ class cmd_setup(commands.Cog):
                     mod: typing.Optional[discord.TextChannel] = None,
                     notification: typing.Optional[discord.TextChannel] = None,
                     clan: typing.Optional[discord.Role] = None):
+        """初期設定を行う"""
         if mcid != None and mod is not None and notification is not None and clan is not None:
             cursor = self.bot.con.cursor()
             cursor.execute(
@@ -73,6 +75,7 @@ class cmd_setup(commands.Cog):
 
     @set.command()
     async def mention(self, ctx, role: typing.Union[discord.Role, str]):
+        """通知時に任意のロールにメンションをするロールを指定"""
         cursor = self.bot.con.cursor()
         if issetup(ctx.guild, cursor, ctx.channel, self.logger):
             if len(ctx.message.role_mentions) == 1:
@@ -90,6 +93,7 @@ class cmd_setup(commands.Cog):
 
     @set.command()
     async def upload(self, ctx, channel: typing.Union[discord.TextChannel, str]):
+        """ファイル共有時に通知をするチャンネルを設定"""
         cursor = self.bot.con.cursor()
         if issetup(ctx.guild, cursor, ctx.channel, self.logger):
             if len(ctx.message.channel_mentions) == 1:
@@ -103,6 +107,24 @@ class cmd_setup(commands.Cog):
             else:
                 await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
                                "`,set upload [チャンネル or off]` ファイル共有時に通知をするチャンネルを設定(offで解除)")
+        cursor.close()
+
+    @set.command()
+    async def newvote(self, ctx, channel: typing.Union[discord.TextChannel, str]):
+        """新しいサーバーがANNIに作成された時に通知するチャンネルを設定する"""
+        cursor = self.bot.con.cursor()
+        if issetup(ctx.guild, cursor, ctx.channel, self.logger):
+            if len(ctx.message.channel_mentions) == 1:
+                cursor.execute(
+                    f"UPDATE `guild_data` SET `new_server_id` ={channel.id}  WHERE guild_id={ctx.guild}")
+                await ctx.send("設定しました。")
+            elif channel == "off":
+                cursor.execute(
+                    f"UPDATE `guild_data` SET `new_server_id` =NULL  WHERE guild_id={ctx.guild}")
+                await ctx.send("設定しました。")
+            else:
+                await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
+                               "`,set upload [チャンネル or off]` 新しいサーバーがANNIに作成された時に通知するチャンネルを設定(offで解除)")
         cursor.close()
 
 
