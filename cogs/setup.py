@@ -77,14 +77,14 @@ class cmd_setup(commands.Cog):
     async def mention(self, ctx, role: typing.Union[discord.Role, str]):
         """通知時に任意のロールにメンションをするロールを指定"""
         cursor = self.bot.con.cursor()
-        if issetup(ctx.guild, cursor, ctx.channel, self.logger):
+        if await issetup(ctx.guild, cursor, ctx.channel, self.logger):
             if len(ctx.message.role_mentions) == 1:
                 cursor.execute(
-                    f"UPDATE `guild_data` SET `mention_id` ={role.id}  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `mention_id` ={role.id}  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
             elif role == "off":
                 cursor.execute(
-                    f"UPDATE `guild_data` SET `mention_id` =NULL  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `mention_id` =NULL  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
             else:
                 await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
@@ -95,14 +95,14 @@ class cmd_setup(commands.Cog):
     async def upload(self, ctx, channel: typing.Union[discord.TextChannel, str]):
         """ファイル共有時に通知をするチャンネルを設定"""
         cursor = self.bot.con.cursor()
-        if issetup(ctx.guild, cursor, ctx.channel, self.logger):
+        if await issetup(ctx.guild, cursor, ctx.channel, self.logger):
             if len(ctx.message.channel_mentions) == 1:
                 cursor.execute(
-                    f"UPDATE `guild_data` SET `upload_id` ={channel.id}  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `upload_id` ={channel.id}  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
             elif channel == "off":
                 cursor.execute(
-                    f"UPDATE `guild_data` SET `upload_id` =NULL  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `upload_id` =NULL  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
             else:
                 await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
@@ -113,14 +113,14 @@ class cmd_setup(commands.Cog):
     async def newvote(self, ctx, channel: typing.Union[discord.TextChannel, str]):
         """新しいサーバーがANNIに作成された時に通知するチャンネルを設定する"""
         cursor = self.bot.con.cursor()
-        if issetup(ctx.guild, cursor, ctx.channel, self.logger):
+        if await issetup(ctx.guild, cursor, ctx.channel, self.logger):
             if len(ctx.message.channel_mentions) == 1:
                 cursor.execute(
-                    f"UPDATE `guild_data` SET `new_server_id` ={channel.id}  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `new_server_id` ={channel.id}  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
             elif channel == "off":
                 cursor.execute(
-                    f"UPDATE `guild_data` SET `new_server_id` =NULL  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `new_server_id` =NULL  WHERE guild_id={ctx.guild}")
                 await ctx.send("設定しました。")
             else:
                 await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
