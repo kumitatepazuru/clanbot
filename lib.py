@@ -57,7 +57,7 @@ async def usedname(name,channel):
         driver.quit()
 
 
-async def issetup(guild,cursor,channel,logger,send=True):
+async def issetup(guild:discord.Guild,cursor,channel,logger,send=True):
     logger.info("LIB:issetup:checking guild "+str(guild.id))
     cursor.execute(f"SELECT * FROM clanbot.guild_data WHERE guild_id={guild.id}")
     rows = cursor.fetchall()

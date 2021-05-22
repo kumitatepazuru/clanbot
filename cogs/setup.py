@@ -80,11 +80,11 @@ class cmd_setup(commands.Cog):
         if await issetup(ctx.guild, cursor, ctx.channel, self.logger):
             if len(ctx.message.role_mentions) == 1:
                 cursor.execute(
-                    f"UPDATE clanbot.`guild_data` SET `mention_id` ={role.id}  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `mention_id` ={role.id}  WHERE guild_id={ctx.guild.id}")
                 await ctx.send("設定しました。")
             elif role == "off":
                 cursor.execute(
-                    f"UPDATE clanbot.`guild_data` SET `mention_id` =NULL  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `mention_id` =NULL  WHERE guild_id={ctx.guild.id}")
                 await ctx.send("設定しました。")
             else:
                 await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
@@ -98,11 +98,11 @@ class cmd_setup(commands.Cog):
         if await issetup(ctx.guild, cursor, ctx.channel, self.logger):
             if len(ctx.message.channel_mentions) == 1:
                 cursor.execute(
-                    f"UPDATE clanbot.`guild_data` SET `upload_id` ={channel.id}  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `upload_id` ={channel.id}  WHERE guild_id={ctx.guild.id}")
                 await ctx.send("設定しました。")
             elif channel == "off":
                 cursor.execute(
-                    f"UPDATE clanbot.`guild_data` SET `upload_id` =NULL  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `upload_id` =NULL  WHERE guild_id={ctx.guild.id}")
                 await ctx.send("設定しました。")
             else:
                 await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
@@ -116,11 +116,11 @@ class cmd_setup(commands.Cog):
         if await issetup(ctx.guild, cursor, ctx.channel, self.logger):
             if len(ctx.message.channel_mentions) == 1:
                 cursor.execute(
-                    f"UPDATE clanbot.`guild_data` SET `new_server_id` ={channel.id}  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `new_server_id` ={channel.id}  WHERE guild_id={ctx.guild.id}")
                 await ctx.send("設定しました。")
             elif channel == "off":
                 cursor.execute(
-                    f"UPDATE clanbot.`guild_data` SET `new_server_id` =NULL  WHERE guild_id={ctx.guild}")
+                    f"UPDATE clanbot.`guild_data` SET `new_server_id` =NULL  WHERE guild_id={ctx.guild.id}")
                 await ctx.send("設定しました。")
             else:
                 await ctx.send("このコマンドに引数が足りないか多すぎます。\n\n**使い方**\n※[]は適切なメンションや文字に置き換えてください。()で囲まれているものは任意です。\n"
