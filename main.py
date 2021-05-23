@@ -89,7 +89,7 @@ class main(commands.Bot):
                 await channel.send("restarted. command completed.")
             os.remove("ID_DISCORD_CL_CLAN")
 
-    async def join(self, guild: discord.Guild):
+    async def on_guild_join(self, guild: discord.Guild):
         logging.info("server joined guild id:"+str(guild.id))
         if guild.system_channel is not None:
             channel = guild.system_channel
