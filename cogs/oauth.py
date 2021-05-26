@@ -31,7 +31,7 @@ class oauth(commands.Cog):
                 }
                 channel: discord.TextChannel = await guild.create_text_channel(name=message.author.name + "-認証",
                                                                                overwrites=overwrites)
-                if await usedname(message.content, channel):
+                if await usedname(message.content, channel,self.logger):
                     self.logger.info("Already used mcid. Continue authentication.")
                     self.logger.info(f"URL: https://ja.namemc.com/profile/{message.content}.1")
                     msg: discord.Message = await channel.send(
@@ -59,6 +59,7 @@ class oauth(commands.Cog):
                 else:
                     self.logger.warning("not used this mcid.")
                     self.logger.warning(f"content: {message.content}")
+                    await channel.send("あなたが送信したmcid("+message.content+"は存在しませんでした。なにか間違いがある場合はこちらでお話ください。")
                     await self.bot.get_channel(rows[3]).send(
                         "@everyone " + message.author.name + "が送信した" + message.
                         content + "は存在しませんでした。適切な処理をしてください。チャンネル: " + channel.mention)
