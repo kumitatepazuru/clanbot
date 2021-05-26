@@ -27,7 +27,7 @@ async def process_output(p, m, msg, ctx):
     return msg, m
 
 
-async def usedname(name,channel):
+async def usedname(name,channel,logger=None):
     # Chrome のオプションを設定する
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
@@ -44,9 +44,12 @@ async def usedname(name,channel):
     # Selenium 経由でブラウザを操作する
     driver.get('https://ja.namemc.com/search?q=' + name)
     try:
-        if driver.find_element_by_css_selector(
+        t = driver.find_element_by_css_selector(
                 "#status-bar > div > div > div.col-md-5.text-center.my-1 > div > div:nth-child(1) > div:nth-child(2)"
-        ).text == "Unavailable":
+        ).text
+        if logger is not None:
+            logger.info("msg:"+t)
+        if t == "Unavailable":
             return True
         else:
             return False
